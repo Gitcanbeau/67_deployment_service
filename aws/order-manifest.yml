@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderapp
+  template:
+    metadata:
+      labels:
+        app: orderapp
+    spec:
+      containers:
+        - name: orderapp
+          image: canbeaudocker/order-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9094
+          env:
+            #We have added this Java Tools option of TLS client protocol.
+            #The reason why we are doing this is because MongoDB needs an SSL handshake.
+            #Without this, you will get an exception for SSL handshake to prevent that exception.
+            #For SSL handshake part, you have to use this environment variable while creating the pod itself so
+            #that your pod can have an SSL handshake with the Mongo database without any problem.
+            #So this is how you will be adding a certificate which is capable enough to make the handshake possible.
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Djdk.tls.client.protocols=TLSv1.2"
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: configmap
+                  key: orderdb_url
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: "orderdb"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: orderapp
+  ports:
+    - protocol: TCP
+      port: 9094
+      targetPort: 9094
