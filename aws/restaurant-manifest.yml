@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: restaurantapp
-          image: canbeaudocker/restaurant-listing-service:26
+          image: canbeaudocker/restaurant-listing-service:{VERSION}
           imagePullPolicy: Always
           ports:
             - containerPort: 9091
