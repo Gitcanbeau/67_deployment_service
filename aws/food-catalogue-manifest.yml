@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: foodcatalogueapp
-          image: canbeaudocker/food-catalogue-service:latest
+          image: canbeaudocker/food-catalogue-service:26
           imagePullPolicy: Always
           ports:
             - containerPort: 9092 #
