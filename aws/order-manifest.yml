@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: orderapp
-          image: canbeaudocker/order-service:latest
+          image: canbeaudocker/order:${VERSION}
           imagePullPolicy: Always
           ports:
             - containerPort: 9094
